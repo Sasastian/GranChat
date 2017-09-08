@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>CHAT</title>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <style>
+            #controls{
+                position: absolute;
+                bottom: 0px;
+                left: 0px;
+                padding: 20px;
+                border-top: 2px #333 solid;
+                display: block;
+            }
+            ul{
+                padding: 20px;
+                width: 100%
+            }
+
+            #controls #msj{
+                height: 100%;
+                width: 100%
+            }
+            #controls #btn{
+                float: right;
+                padding:20px;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            var socket = io();
+            $(function(){
+                $("form").submit(function(){
+                    var mensaje = $("#msj").val();
+
+                    if(mensaje=='')return false;
+
+                    socket.emit('message', mensaje);
+                    $("#msj").val('').focus();
+                    return false;
+                });
+            });
+           
+            socket.on('message', function(msj, id){
+               $('#message').append($('<li>').text(id +' DICE:  '+msj));
+            });
+            
+        </script>
+            <ul id="message"></ul>
+            <div id="controls">
+                <form action="">    
+                    <input type="text" id="msj" placeholder="Escribe">
+                    <input type="submit" id="btn" value="Enviar">
+                </form> 
+            </div>
+           
+    </body>
+</html>
